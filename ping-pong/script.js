@@ -18,8 +18,8 @@ class PongGame {
         this.paddle2Pos = 160;
         this.ballX = this.boardWidth / 2;
         this.ballY = this.boardHeight / 2;
-        this.ballSpeedX = 5;
-        this.ballSpeedY = 5;
+        this.ballSpeedX = 2;
+        this.ballSpeedY = 2;
         this.paddleSpeed = 8;
 
         this.score1 = 0;
@@ -84,8 +84,8 @@ class PongGame {
     resetBall() {
         this.ballX = this.boardWidth / 2;
         this.ballY = this.boardHeight / 2;
-        this.ballSpeedX = 5 * (Math.random() > 0.5 ? 1 : -1);
-        this.ballSpeedY = 5 * (Math.random() > 0.5 ? 1 : -1);
+        this.ballSpeedX = 2 * (Math.random() > 0.5 ? 1 : -1);
+        this.ballSpeedY = 2 * (Math.random() > 0.5 ? 1 : -1);
     }
 
     updateScore() {
