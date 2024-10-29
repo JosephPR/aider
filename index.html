@@ -3,50 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Planner</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>{% if content.html_title %}{{ content.html_title }}{% else %}Default Title{% endif %}</title>
+    <link rel="stylesheet" href="{{ get_asset_url('styles.css') }}">
+    {% require_css %}
 </head>
 <body>
-    <div class="container">
-        <h1>Recipe Planner</h1>
-        
-        <div class="add-recipe-section">
-            <h2>Add New Recipe</h2>
-            <form id="recipe-form">
-                <input type="text" id="recipe-name" placeholder="Recipe Name" required>
-                <select id="recipe-cuisine" required>
-                    <option value="">Select Cuisine Type</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Indian">Indian</option>
-                    <option value="American">American</option>
-                    <option value="Other">Other</option>
-                </select>
-                <input type="file" id="recipe-image" accept="image/*">
-                <textarea id="recipe-ingredients" placeholder="Ingredients (one per line)" required></textarea>
-                <textarea id="recipe-instructions" placeholder="Instructions" required></textarea>
-                <button type="submit">Add Recipe</button>
-            </form>
-        </div>
+    <!-- Header Section -->
+    <header class="header">
+        {% global_widget name="header" %}
+    </header>
 
-        <div class="recipes-section">
-            <h2>My Recipes</h2>
-            <div class="filter-section">
-                <label for="cuisine-filter">Filter by Cuisine:</label>
-                <select id="cuisine-filter">
-                    <option value="">All Cuisines</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Indian">Indian</option>
-                    <option value="American">American</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div id="recipes-list"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>{{ content.hero_title }}</h1>
+            <p>{{ content.hero_description }}</p>
+            {% module "hero_cta" path="@hubspot/rich_text" %}
         </div>
-    </div>
-    <script src="script.js"></script>
+    </section>
+
+    <!-- Main Content Section -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Form Section -->
+            <div class="form-section">
+                {% module "form" path="@hubspot/form" %}
+            </div>
+            
+            <!-- Features Section -->
+            <div class="features">
+                {% module "features" path="@hubspot/rich_text" %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        {% global_widget name="footer" %}
+    </footer>
+
+    {% require_js %}
+    <script src="{{ get_asset_url('script.js') }}"></script>
 </body>
 </html>
