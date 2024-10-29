@@ -14,6 +14,16 @@
             <h2>Add New Recipe</h2>
             <form id="recipe-form">
                 <input type="text" id="recipe-name" placeholder="Recipe Name" required>
+                <select id="recipe-cuisine" required>
+                    <option value="">Select Cuisine Type</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Indian">Indian</option>
+                    <option value="American">American</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="file" id="recipe-image" accept="image/*">
                 <textarea id="recipe-ingredients" placeholder="Ingredients (one per line)" required></textarea>
                 <textarea id="recipe-instructions" placeholder="Instructions" required></textarea>
                 <button type="submit">Add Recipe</button>
@@ -22,6 +32,18 @@
 
         <div class="recipes-section">
             <h2>My Recipes</h2>
+            <div class="filter-section">
+                <label for="cuisine-filter">Filter by Cuisine:</label>
+                <select id="cuisine-filter">
+                    <option value="">All Cuisines</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Indian">Indian</option>
+                    <option value="American">American</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
             <div id="recipes-list"></div>
         </div>
     </div>
