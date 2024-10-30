@@ -115,3 +115,76 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from models import db, Player
+import json
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///baseball.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+@app.route('/api/players', methods=['GET'])
+def get_players():
+    players = Player.query.all()
+    return jsonify([player.to_dict() for player in players])
+
+@app.route('/api/players/<int:id>', methods=['GET'])
+def get_player(id):
+    player = Player.query.get_or_404(id)
+    return jsonify(player.to_dict())
+
+@app.route('/api/players/team/<team>', methods=['GET'])
+def get_players_by_team(team):
+    players = Player.query.filter_by(team=team.upper()).all()
+    return jsonify([player.to_dict() for player in players])
+
+@app.route('/api/players/position/<position>', methods=['GET'])
+def get_players_by_position(position):
+    players = Player.query.filter_by(position=position.upper()).all()
+    return jsonify([player.to_dict() for player in players])
+
+def init_db():
+    with app.app_context():
+        db.create_all()
+        
+        # Only load data if the database is empty
+        if Player.query.first() is None:
+            with open('mlb.json') as f:
+                players_data = json.load(f)
+                
+            for data in players_data:
+                player = Player(
+                    name=data['Player'],
+                    team=data['Team'],
+                    position=data['Pos'],
+                    age=data['Age'],
+                    games=data['G'],
+                    at_bats=data['AB'],
+                    runs=data['R'],
+                    hits=data['H'],
+                    doubles=data['2B'],
+                    triples=data['3B'],
+                    home_runs=data['HR'],
+                    rbi=data['RBI'],
+                    stolen_bases=data['SB'],
+                    caught_stealing=data['CS'],
+                    walks=data['BB'],
+                    strikeouts=data['SO'],
+                    sacrifice_hits=data['SH'],
+                    sacrifice_flies=data['SF'],
+                    hit_by_pitch=data['HBP'],
+                    avg=data['AVG'],
+                    obp=data['OBP'],
+                    slg=data['SLG'],
+                    ops=data['OPS']
+                )
+                db.session.add(player)
+            
+            db.session.commit()
+
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True)
