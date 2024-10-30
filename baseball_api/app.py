@@ -23,25 +23,6 @@ class Player(db.Model):
     strikeouts = db.Column(db.Integer)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-@app.route('/api/players', methods=['GET'])
-def get_players():
-    players = Player.query.all()
-    return jsonify([{
-        'id': player.id,
-        'name': player.name,
-        'team': player.team,
-        'position': player.position,
-        'batting_average': player.batting_average,
-        'home_runs': player.home_runs,
-        'rbi': player.rbi,
-        'ops': player.ops,
-        'era': player.era,
-        'wins': player.wins,
-        'losses': player.losses,
-        'saves': player.saves,
-        'strikeouts': player.strikeouts,
-        'updated_at': player.updated_at.isoformat()
-    } for player in players])
 
 @app.route('/api/players', methods=['GET', 'POST'])
 def get_players():
