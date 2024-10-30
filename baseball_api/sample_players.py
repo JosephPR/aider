@@ -1,12 +1,12 @@
 import csv
-from app import app, db, Player
+from baseball_api.app import app, db, Player
 
 def add_sample_players():
     # Clear existing players
     db.session.query(Player).delete()
     
     # Read CSV and add players
-    with open('mlb-player-stats-Batters.csv', 'r', encoding='utf-8-sig') as f:
+    with open('baseball_api/mlb-player-stats-Batters.csv', 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for row in reader:
             player = Player(
