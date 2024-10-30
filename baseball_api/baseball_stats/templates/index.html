@@ -19,6 +19,17 @@
 </head>
 <body>
     <h1>Baseball Player Stats</h1>
+    <div id="filters" style="margin: 20px 0;">
+        <label for="team-filter">Team:</label>
+        <select id="team-filter">
+            <option value="">All Teams</option>
+        </select>
+        
+        <label for="position-filter" style="margin-left: 20px;">Position:</label>
+        <select id="position-filter">
+            <option value="">All Positions</option>
+        </select>
+    </div>
     <div id="players">
         <table>
             <thead>
@@ -42,11 +53,47 @@
     </div>
 
     <script>
-        fetch('/api/players')
-            .then(response => response.json())
-            .then(players => {
-                const tbody = document.getElementById('players-table');
-                players.forEach(player => {
+        let allPlayers = [];
+        
+        function populateFilters(players) {
+            const teams = new Set(players.map(p => p.team).filter(Boolean));
+            const positions = new Set(players.map(p => p.position).filter(Boolean));
+            
+            const teamFilter = document.getElementById('team-filter');
+            const positionFilter = document.getElementById('position-filter');
+            
+            teams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                teamFilter.appendChild(option);
+            });
+            
+            positions.forEach(position => {
+                const option = document.createElement('option');
+                option.value = position;
+                option.textContent = position;
+                positionFilter.appendChild(option);
+            });
+        }
+        
+        function filterPlayers() {
+            const selectedTeam = document.getElementById('team-filter').value;
+            const selectedPosition = document.getElementById('position-filter').value;
+            
+            const filteredPlayers = allPlayers.filter(player => {
+                const teamMatch = !selectedTeam || player.team === selectedTeam;
+                const positionMatch = !selectedPosition || player.position === selectedPosition;
+                return teamMatch && positionMatch;
+            });
+            
+            displayPlayers(filteredPlayers);
+        }
+        
+        function displayPlayers(players) {
+            const tbody = document.getElementById('players-table');
+            tbody.innerHTML = '';
+            players.forEach(player => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${player.name || '-'}</td>
@@ -63,6 +110,18 @@
                     `;
                     tbody.appendChild(row);
                 });
+            }
+
+        fetch('/api/players')
+            .then(response => response.json())
+            .then(players => {
+                allPlayers = players;
+                populateFilters(players);
+                displayPlayers(players);
+                
+                // Add filter event listeners
+                document.getElementById('team-filter').addEventListener('change', filterPlayers);
+                document.getElementById('position-filter').addEventListener('change', filterPlayers);
             })
             .catch(error => console.error('Error:', error));
     </script>
