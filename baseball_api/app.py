@@ -16,15 +16,23 @@ class Player(db.Model):
     name = db.Column(db.String(100), nullable=False)
     team = db.Column(db.String(50))
     position = db.Column(db.String(20))
-    batting_average = db.Column(db.Float)
+    age = db.Column(db.Integer)
+    games = db.Column(db.Integer)
+    at_bats = db.Column(db.Integer)
+    runs = db.Column(db.Integer)
+    hits = db.Column(db.Integer)
+    doubles = db.Column(db.Integer)
+    triples = db.Column(db.Integer)
     home_runs = db.Column(db.Integer)
     rbi = db.Column(db.Integer)
-    ops = db.Column(db.Float)
-    era = db.Column(db.Float)
-    wins = db.Column(db.Integer)
-    losses = db.Column(db.Integer)
-    saves = db.Column(db.Integer)
+    stolen_bases = db.Column(db.Integer)
+    caught_stealing = db.Column(db.Integer)
+    walks = db.Column(db.Integer)
     strikeouts = db.Column(db.Integer)
+    batting_average = db.Column(db.Float)
+    on_base_pct = db.Column(db.Float)
+    slugging_pct = db.Column(db.Float)
+    ops = db.Column(db.Float)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -36,15 +44,23 @@ def get_players():
             name=data['name'],
             team=data['team'],
             position=data['position'],
-            batting_average=data.get('batting_average'),
+            age=data.get('age'),
+            games=data.get('games'),
+            at_bats=data.get('at_bats'),
+            runs=data.get('runs'), 
+            hits=data.get('hits'),
+            doubles=data.get('doubles'),
+            triples=data.get('triples'),
             home_runs=data.get('home_runs'),
             rbi=data.get('rbi'),
-            ops=data.get('ops'),
-            era=data.get('era'),
-            wins=data.get('wins'),
-            losses=data.get('losses'),
-            saves=data.get('saves'),
-            strikeouts=data.get('strikeouts')
+            stolen_bases=data.get('stolen_bases'),
+            caught_stealing=data.get('caught_stealing'),
+            walks=data.get('walks'),
+            strikeouts=data.get('strikeouts'),
+            batting_average=data.get('batting_average'),
+            on_base_pct=data.get('on_base_pct'),
+            slugging_pct=data.get('slugging_pct'),
+            ops=data.get('ops')
         )
         db.session.add(new_player)
         db.session.commit()

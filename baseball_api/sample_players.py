@@ -1,16 +1,37 @@
+import csv
 from app import app, db, Player
 
 def add_sample_players():
-    players = [
-        {
-            "name": "Mike Trout",
-            "team": "Los Angeles Angels",
-            "position": "CF",
-            "batting_average": 0.296,
-            "home_runs": 40,
-            "rbi": 95,
-            "ops": 0.972
-        },
+    # Clear existing players
+    db.session.query(Player).delete()
+    
+    # Read CSV and add players
+    with open('mlb-player-stats-Batters.csv', 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            player = Player(
+                name=row['Player'],
+                team=row['Team'],
+                position=row['Pos'],
+                age=int(row['Age']),
+                games=int(row['G']),
+                at_bats=int(row['AB']),
+                runs=int(row['R']),
+                hits=int(row['H']),
+                doubles=int(row['2B']),
+                triples=int(row['3B']),
+                home_runs=int(row['HR']),
+                rbi=int(row['RBI']),
+                stolen_bases=int(row['SB']),
+                caught_stealing=int(row['CS']),
+                walks=int(row['BB']),
+                strikeouts=int(row['SO']),
+                batting_average=float(row['AVG']),
+                on_base_pct=float(row['OBP']),
+                slugging_pct=float(row['SLG']),
+                ops=float(row['OPS'])
+            )
+            db.session.add(player)
         {
             "name": "Shohei Ohtani",
             "team": "Los Angeles Dodgers",
