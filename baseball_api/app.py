@@ -43,6 +43,49 @@ def get_players():
         'updated_at': player.updated_at.isoformat()
     } for player in players])
 
+@app.route('/api/players', methods=['GET', 'POST'])
+def get_players():
+    if request.method == 'POST':
+        data = request.json
+        new_player = Player(
+            name=data['name'],
+            team=data['team'],
+            position=data['position'],
+            batting_average=data.get('batting_average'),
+            home_runs=data.get('home_runs'),
+            rbi=data.get('rbi'),
+            ops=data.get('ops'),
+            era=data.get('era'),
+            wins=data.get('wins'),
+            losses=data.get('losses'),
+            saves=data.get('saves'),
+            strikeouts=data.get('strikeouts')
+        )
+        db.session.add(new_player)
+        db.session.commit()
+        return jsonify({
+            'message': 'Player created successfully',
+            'id': new_player.id
+        }), 201
+
+    players = Player.query.all()
+    return jsonify([{
+        'id': player.id,
+        'name': player.name,
+        'team': player.team,
+        'position': player.position,
+        'batting_average': player.batting_average,
+        'home_runs': player.home_runs,
+        'rbi': player.rbi,
+        'ops': player.ops,
+        'era': player.era,
+        'wins': player.wins,
+        'losses': player.losses,
+        'saves': player.saves,
+        'strikeouts': player.strikeouts,
+        'updated_at': player.updated_at.isoformat()
+    } for player in players])
+
 @app.route('/api/players/<int:player_id>', methods=['GET'])
 def get_player(player_id):
     player = Player.query.get_or_404(player_id)
