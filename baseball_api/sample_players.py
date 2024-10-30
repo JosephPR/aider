@@ -515,12 +515,6 @@ def add_sample_players():
             "saves": 33,
             "strikeouts": 85
         }
-    ]
-
-    for player_data in players:
-        player = Player(**player_data)
-        db.session.add(player)
-    
     db.session.commit()
 
 if __name__ == '__main__':
