@@ -1,8 +1,12 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, 
+    template_folder='baseball_stats/templates',
+    static_folder='baseball_stats/static')
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///baseball_stats.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -86,6 +90,10 @@ def get_player(player_id):
         'strikeouts': player.strikeouts,
         'updated_at': player.updated_at.isoformat()
     })
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     with app.app_context():
