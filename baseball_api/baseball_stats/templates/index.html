@@ -51,3 +51,73 @@
     <script src="/static/script.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Baseball Stats</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Baseball Player Stats</h1>
+    <div id="players">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Team</th>
+                    <th>Position</th>
+                    <th>Batting Average</th>
+                    <th>Home Runs</th>
+                    <th>RBI</th>
+                    <th>OPS</th>
+                    <th>ERA</th>
+                    <th>W-L</th>
+                    <th>Saves</th>
+                    <th>Strikeouts</th>
+                </tr>
+            </thead>
+            <tbody id="players-table">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        fetch('/api/players')
+            .then(response => response.json())
+            .then(players => {
+                const tbody = document.getElementById('players-table');
+                players.forEach(player => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${player.name || '-'}</td>
+                        <td>${player.team || '-'}</td>
+                        <td>${player.position || '-'}</td>
+                        <td>${player.batting_average?.toFixed(3) || '-'}</td>
+                        <td>${player.home_runs || '-'}</td>
+                        <td>${player.rbi || '-'}</td>
+                        <td>${player.ops?.toFixed(3) || '-'}</td>
+                        <td>${player.era?.toFixed(2) || '-'}</td>
+                        <td>${player.wins || 0}-${player.losses || 0}</td>
+                        <td>${player.saves || '-'}</td>
+                        <td>${player.strikeouts || '-'}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
